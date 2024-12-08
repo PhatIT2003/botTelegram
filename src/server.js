@@ -56,14 +56,13 @@ function startPolling() {
 
 // Xử lý sự kiện polling error
 bot.on('polling_error', (error) => {
-  console.error('Polling error details:', error);
-  
-  // Nếu là lỗi 409, thử khởi động lại polling
+  console.error('Polling error:', error.code);
   if (error.code === 'ETELEGRAM') {
-    console.log('Restarting polling...');
-    startPolling();
+    bot.stopPolling();
+    setTimeout(() => startPolling(), 5000);
   }
 });
+
 
 // Xử lý lệnh /start
 bot.onText(/\/start/, (msg) => {
@@ -80,12 +79,13 @@ bot.onText(/\/start/, (msg) => {
 });
 
 // Xử lý tin nhắn thông thường
+// Xử lý tin nhắn thông thường
 bot.on('message', (msg) => {
-  // Bỏ qua các lệnh
+  const chatId = msg.chat.id;
+
+  // Bỏ qua các lệnh đã được xử lý (như /start)
   if (msg.text && msg.text.startsWith('/')) return;
 
-  const chatId = msg.chat.id;
-  
   try {
     bot.sendMessage(chatId, '🤖 Xin chào! Vui lòng sử dụng menu để tương tác.', {
       reply_markup: createMainKeyboard()
@@ -94,6 +94,7 @@ bot.on('message', (msg) => {
     console.error('Error in message handler:', error);
   }
 });
+
 
 // Xử lý callback query
 bot.on('callback_query', (callbackQuery) => {
