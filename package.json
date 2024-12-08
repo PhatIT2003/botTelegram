@@ -6,8 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
     "dev": "nodemon --exec node src/server.js",
-    "build": "babel src -d build --copy-files",
-    "build-src": "babel src -d build --copy-files"
+    "build": "babel src/s erver.js -d build --copy-files",
+    "build-src": "babel src/server.js -d build --copy-files"
   },
   "author": "",
   "license": "ISC",
